@@ -8,6 +8,7 @@ import { getCategories } from '@/lib/store-data.js';
 import { themeVars } from '@/lib/theme.js';
 import { organizationLd, safeJsonLd, storeMetadata } from '@/lib/seo.js';
 import { loadStoreOrState } from '@/lib/load.js';
+import { loadConfig } from '@/lib/config.js';
 
 export async function generateMetadata() {
   const loaded = await loadStoreOrState();
@@ -35,6 +36,11 @@ export default async function StoreLayout({ children }) {
       <PaymentAvailability initialMethods={store.paymentMethods}>
         <AttributionCapture />
         <div className="sk-root" style={themeVars(store.theme)}>
+          {store.demoNotice ? (
+            <div className="sk-demo-strip" role="note">
+              {store.demoNotice} <a href={loadConfig().rootUrl}>Create your own store</a>
+            </div>
+          ) : null}
           {store.announcement ? <div className="sk-announcement" role="status">{store.announcement.text}</div> : null}
           <Header store={store} categories={categories} />
           <main className="sk-main"><div className="sk-container sk-page">{children}</div></main>
