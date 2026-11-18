@@ -9,11 +9,11 @@ const store = toStore(rawStore());
 const product = rawProduct();
 
 describe('canonical addresses', () => {
-  it('a product canonicalises to the store\'s own hostname, not storekit.site', () => {
-    const meta = productMetadata({ store, canonicalHost: 'asha.storekit.site', product });
-    expect(meta.alternates.canonical).toBe(`https://asha.storekit.site/products/brake-pad--${ULID}`);
+  it('a product canonicalises to the store\'s own hostname, not storeflick.in', () => {
+    const meta = productMetadata({ store, canonicalHost: 'asha.storeflick.in', product });
+    expect(meta.alternates.canonical).toBe(`https://asha.storeflick.in/products/brake-pad--${ULID}`);
     expect(meta.openGraph.url).toBe(meta.alternates.canonical);
-    expect(meta.alternates.canonical).not.toContain('//storekit.site');
+    expect(meta.alternates.canonical).not.toContain('//storeflick.in');
   });
 
   it('a store on a custom domain canonicalises to that domain', () => {
@@ -22,23 +22,23 @@ describe('canonical addresses', () => {
 
   it('the canonical host is the API\'s answer: the Host the visitor used is not an input', () => {
     // absoluteUrl takes the canonical host and nothing else
-    expect(absoluteUrl('asha.storekit.site', '/x')).toBe('https://asha.storekit.site/x');
+    expect(absoluteUrl('asha.storeflick.in', '/x')).toBe('https://asha.storeflick.in/x');
   });
 
   it('any other public page names itself in canonical and Open Graph, not the home page', () => {
-    const meta = pageMetadata({ store, canonicalHost: 'asha.storekit.site', path: '/pages/shipping-policy', title: 'Shipping — Asha', description: 'd' });
-    expect(meta.alternates.canonical).toBe('https://asha.storekit.site/pages/shipping-policy');
-    expect(meta.openGraph).toMatchObject({ url: 'https://asha.storekit.site/pages/shipping-policy', title: 'Shipping — Asha' });
+    const meta = pageMetadata({ store, canonicalHost: 'asha.storeflick.in', path: '/pages/shipping-policy', title: 'Shipping — Asha', description: 'd' });
+    expect(meta.alternates.canonical).toBe('https://asha.storeflick.in/pages/shipping-policy');
+    expect(meta.openGraph).toMatchObject({ url: 'https://asha.storeflick.in/pages/shipping-policy', title: 'Shipping — Asha' });
   });
 
   it('a category canonicalises to /category/<slug> on its own store', () => {
-    expect(categoryMetadata({ store, canonicalHost: 'asha.storekit.site', category: { name: 'Kurtis', slug: 'kurtis' } }).alternates.canonical).toBe('https://asha.storekit.site/category/kurtis');
+    expect(categoryMetadata({ store, canonicalHost: 'asha.storeflick.in', category: { name: 'Kurtis', slug: 'kurtis' } }).alternates.canonical).toBe('https://asha.storeflick.in/category/kurtis');
   });
 });
 
 describe('metadata', () => {
   it('store: title, description, Open Graph and image', () => {
-    const meta = storeMetadata({ store, canonicalHost: 'asha.storekit.site' });
+    const meta = storeMetadata({ store, canonicalHost: 'asha.storeflick.in' });
     expect(meta.title).toBe('Asha Boutique');
     expect(meta.description).toBe('Handpicked ethnic wear.');
     expect(meta.openGraph).toMatchObject({ type: 'website', siteName: 'Asha Boutique', title: 'Asha Boutique' });
@@ -46,7 +46,7 @@ describe('metadata', () => {
   });
 
   it('product: title includes the store, price and availability are stated', () => {
-    const meta = productMetadata({ store, canonicalHost: 'asha.storekit.site', product });
+    const meta = productMetadata({ store, canonicalHost: 'asha.storeflick.in', product });
     expect(meta.title).toBe('Brake Pad — Asha Boutique');
     expect(meta.description).toBe('Ceramic brake pads');
     expect(meta.other).toMatchObject({ 'product:price:amount': '1299.00', 'product:price:currency': 'INR', 'product:availability': 'in stock' });
@@ -67,15 +67,15 @@ describe('metadata', () => {
 
 describe('structured data', () => {
   it('describes a product with an offer priced in rupees and its availability', () => {
-    const ld = productLd({ store, canonicalHost: 'asha.storekit.site', product });
+    const ld = productLd({ store, canonicalHost: 'asha.storeflick.in', product });
     expect(ld).toMatchObject({ '@type': 'Product', name: 'Brake Pad', offers: { priceCurrency: 'INR', price: '1299.00', availability: 'https://schema.org/InStock' } });
-    expect(ld.offers.url).toBe(`https://asha.storekit.site/products/brake-pad--${ULID}`);
+    expect(ld.offers.url).toBe(`https://asha.storeflick.in/products/brake-pad--${ULID}`);
     expect(productLd({ store, canonicalHost: 'a.b', product: rawProduct({ inStock: false }) }).offers.availability).toBe('https://schema.org/OutOfStock');
   });
 
   it('describes the store and the breadcrumb trail', () => {
-    expect(organizationLd({ store, canonicalHost: 'asha.storekit.site' })).toMatchObject({ '@type': 'Store', name: 'Asha Boutique', url: 'https://asha.storekit.site/' });
-    const trail = breadcrumbLd({ canonicalHost: 'asha.storekit.site', trail: [{ name: 'Home', path: '/' }, { name: 'Pad', path: '/products/x' }] });
+    expect(organizationLd({ store, canonicalHost: 'asha.storeflick.in' })).toMatchObject({ '@type': 'Store', name: 'Asha Boutique', url: 'https://asha.storeflick.in/' });
+    const trail = breadcrumbLd({ canonicalHost: 'asha.storeflick.in', trail: [{ name: 'Home', path: '/' }, { name: 'Pad', path: '/products/x' }] });
     expect(trail.itemListElement.map((i) => i.position)).toEqual([1, 2]);
   });
 

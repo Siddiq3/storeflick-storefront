@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { whatsappLink } from '@storekit/shared';
+import { whatsappLink } from '@storeflick/shared';
 import { UpiPanel } from './UpiPanel.jsx';
 import { Initial } from './Initial.jsx';
 import { money } from '@/lib/money.js';

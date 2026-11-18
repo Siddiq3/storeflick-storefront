@@ -11,12 +11,12 @@ Indian shoppers who tap a seller's link on Instagram or WhatsApp, mostly on a ph
 They want to see the product, trust the shop, and order quickly, paying cash on delivery or by UPI.
 
 ## Product Purpose
-The public shop for every StoreKit merchant: one Next.js app serves `<slug>.storekit.site` (and custom domains),
+The public shop for every StoreFlick merchant: one Next.js app serves `<slug>.storeflick.in` (and custom domains),
 chosen by hostname. Success is a shopper going from a social link to a placed order without friction or doubt.
 
 ## Positioning
-A small seller's own branded website, run entirely from the StoreKit mobile app, so the shop feels as trustworthy as
-a big marketplace while staying the seller's brand, not StoreKit's.
+A small seller's own branded website, run entirely from the StoreFlick mobile app, so the shop feels as trustworthy as
+a big marketplace while staying the seller's brand, not StoreFlick's.
 
 ## Operating Context
 - Owners set the store's look in the app: primary, secondary, button and background colours, font (system, Inter,
@@ -34,7 +34,7 @@ a big marketplace while staying the seller's brand, not StoreKit's.
 - Many products may have no photo.
 
 ## Brand Commitments
-The store's own name, logo and theme lead. StoreKit appears only as a quiet "powered by" credit.
+The store's own name, logo and theme lead. StoreFlick appears only as a quiet "powered by" credit.
 
 ## Evidence on Hand
 Only real store data from the API: products, prices, MRP, stock, categories, banners, advertised coupons, policies,

@@ -43,7 +43,7 @@ describe('the edge secret never reaches the browser', () => {
   });
 
   it('the header that carries it is written in one place, a server module', () => {
-    const naming = sources.filter((f) => !/^(tests|scripts)\//.test(rel(f)) && /x-storekit-edge-secret/.test(read(f)));
+    const naming = sources.filter((f) => !/^(tests|scripts)\//.test(rel(f)) && /x-storeflick-edge-secret/.test(read(f)));
     expect(naming.map(rel)).toEqual(['lib/api.js']);
   });
 
@@ -52,7 +52,7 @@ describe('the edge secret never reaches the browser', () => {
     expect(read(join(root, 'next.config.mjs'))).not.toMatch(/process\.env\.(EDGE|API_BASE)/);
   });
 
-  it('the browser may connect only to this storefront, so it cannot reach the StoreKit API even if it tried', async () => {
+  it('the browser may connect only to this storefront, so it cannot reach the StoreFlick API even if it tried', async () => {
     const headers = await nextConfig.headers();
     const csp = headers.flatMap((h) => h.headers).find((h) => h.key === 'Content-Security-Policy').value;
     expect(csp).toMatch(/connect-src 'self'(?!\S)/);

@@ -12,7 +12,7 @@ import { loadConfig } from '@/lib/config.js';
 
 export async function generateMetadata() {
   const loaded = await loadStoreOrState();
-  if (!loaded.ok) return { title: 'StoreKit', robots: { index: false, follow: false } };
+  if (!loaded.ok) return { title: 'StoreFlick', robots: { index: false, follow: false } };
   return storeMetadata(loaded);
 }
 

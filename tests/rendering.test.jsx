@@ -8,7 +8,7 @@ import { rawProduct, rawStore, ULID } from './helpers.js';
 // ── What the pages read from: the current store, and the API's answers for it ─────────────────────────────────────
 let loaded;
 const data = { home: null, products: null, product: null, categories: [], settings: null, order: null };
-const ctx = { slug: 'asha', host: 'asha.storekit.site', canonicalHost: 'asha.storekit.site', ip: null };
+const ctx = { slug: 'asha', host: 'asha.storeflick.in', canonicalHost: 'asha.storeflick.in', ip: null };
 
 vi.mock('@/lib/load.js', () => ({ loadStoreOrState: async () => loaded }));
 vi.mock('@/lib/store-data.js', async (original) => {
@@ -64,7 +64,7 @@ describe('the store shell', () => {
     expect(out).not.toContain('01HZZZZZZZZZZZZZZZZZZZZZZZ');
   });
 
-  it('shows "Powered by StoreKit" only where the API says branding applies', async () => {
+  it('shows "Powered by StoreFlick" only where the API says branding applies', async () => {
     loaded = active({ poweredByBranding: true });
     expect(await html(StoreLayout({ children: null }))).toContain('Powered by');
     loaded = active({ poweredByBranding: false });

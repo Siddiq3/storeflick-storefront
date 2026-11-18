@@ -5,7 +5,7 @@ const dev = process.env.NODE_ENV !== 'production';
 
 /**
  * `connect-src 'self'` is the "no browser-side API calls" rule enforced by the browser: a script on a store page
- * cannot reach the StoreKit API (or anywhere else); it can only call this storefront's own `/api/*`. Images may come
+ * cannot reach the StoreFlick API (or anywhere else); it can only call this storefront's own `/api/*`. Images may come
  * from any https host because product images are served from the CDN and the CDN's address is not known here.
  */
 const csp = [

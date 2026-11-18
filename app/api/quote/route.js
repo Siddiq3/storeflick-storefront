@@ -1,4 +1,4 @@
-import { quoteSchema } from '@storekit/validation';
+import { quoteSchema } from '@storeflick/validation';
 import { handleStorePost } from '@/lib/bff.js';
 import { quoteCart } from '@/lib/store-data.js';
 

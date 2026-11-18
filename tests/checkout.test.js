@@ -141,15 +141,15 @@ describe('remembering a returning shopper (no account)', () => {
 
   it('treats stored data as untrusted: only plain, bounded text fields come back', () => {
     const storage = memory();
-    storage.setItem('storekit.address.v1', JSON.stringify({ fullName: 'A'.repeat(500), mobile: 42, city: { x: 1 }, businessId: 'X', __proto__: { y: 1 }, pincode: '560038' }));
+    storage.setItem('storeflick.address.v1', JSON.stringify({ fullName: 'A'.repeat(500), mobile: 42, city: { x: 1 }, businessId: 'X', __proto__: { y: 1 }, pincode: '560038' }));
     const loaded = loadAddress(storage);
     expect(loaded.fullName).toHaveLength(120);
     expect(loaded.mobile).toBe('');
     expect(loaded.city).toBe('');
     expect(loaded).not.toHaveProperty('businessId');
-    storage.setItem('storekit.address.v1', 'not json');
+    storage.setItem('storeflick.address.v1', 'not json');
     expect(loadAddress(storage)).toBeNull();
-    storage.setItem('storekit.address.v1', JSON.stringify({ nothing: 'useful' }));
+    storage.setItem('storeflick.address.v1', JSON.stringify({ nothing: 'useful' }));
     expect(loadAddress(storage)).toBeNull();
   });
 

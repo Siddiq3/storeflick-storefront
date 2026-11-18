@@ -19,9 +19,9 @@ export function AttributionCapture() {
     captureInstagramRef(ref);
     let visitorId;
     try {
-      visitorId=sessionStorage.getItem('storekit.ig.visitor.v1');
+      visitorId=sessionStorage.getItem('storeflick.ig.visitor.v1');
       if(!visitorId||!/^[a-f0-9]{32}$/.test(visitorId)){
-        visitorId=id();sessionStorage.setItem('storekit.ig.visitor.v1',visitorId);
+        visitorId=id();sessionStorage.setItem('storeflick.ig.visitor.v1',visitorId);
       }
     }catch{visitorId=id();}
     void postJson('/api/instagram/visit',{ref,visitorId}).catch(()=>null);

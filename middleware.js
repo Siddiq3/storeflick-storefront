@@ -7,7 +7,7 @@ import { STORE_HEADERS, STATE_PATHS } from '@/lib/headers.js';
 /**
  * Hostname → store, for every request.
  *
- *   asha.storekit.site/products/x  ->  ask the API which store `asha.storekit.site` is
+ *   asha.storeflick.in/products/x  ->  ask the API which store `asha.storeflick.in` is
  *                                      -> the store's slug is passed to the page in a request header
  *
  * The store is never taken from the URL, a cookie, a query string or a body: only from the answer to "who is this

@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { whatsappLink } from '@storekit/shared';
+import { whatsappLink } from '@storeflick/shared';
 import { loadConfig } from '@/lib/config.js';
 import { categoryPath, safeHttpsUrl } from '@/lib/urls.js';
 import { ChatIcon, MailIcon, PhoneIcon, PinIcon } from './icons.jsx';
@@ -78,7 +78,7 @@ export function Footer({ store, categories = [] }) {
       <div className="sk-copyright">
         <div className="sk-container">
           <span>© {new Date().getFullYear()} {store.name}. All Rights Reserved.</span>
-          {branding ? <span>Powered by <a href={branding} rel="noopener">StoreKit</a></span> : null}
+          {branding ? <span>Powered by <a href={branding} rel="noopener">StoreFlick</a></span> : null}
         </div>
       </div>
     </footer>

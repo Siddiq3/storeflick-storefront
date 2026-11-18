@@ -1,7 +1,7 @@
 name: Deploy storefront preview (workers.dev, temporary)
 
 # TEMPORARY real-user testing before the production domain exists. Deploys the separate Worker
-# storekit-storefront-preview (wrangler.jsonc, env "preview") to its workers.dev address only, serving the one store
+# storeflick-storefront-preview (wrangler.jsonc, env "preview") to its workers.dev address only, serving the one store
 # named by `store_slug`. Manual only; ticking `dry_run` stops before uploading. Production is untouched.
 on:
   workflow_dispatch:
@@ -98,7 +98,7 @@ jobs:
         run: |
           set -euo pipefail
           SENTINEL="sentinel-$(openssl rand -hex 24)"
-          EDGE_SHARED_SECRET="$SENTINEL" API_BASE_URL=https://api.storekit.site/v1 npm run cf:build
+          EDGE_SHARED_SECRET="$SENTINEL" API_BASE_URL=https://api.storeflick.in/v1 npm run cf:build
           EDGE_SHARED_SECRET="$SENTINEL" npm run verify:bundle
 
       - name: Deploy preview to workers.dev

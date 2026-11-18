@@ -74,7 +74,7 @@ jobs:
         run: |
           set -euo pipefail
           SENTINEL="sentinel-$(openssl rand -hex 24)"
-          EDGE_SHARED_SECRET="$SENTINEL" API_BASE_URL=https://api.storekit.site/v1 npm run cf:build
+          EDGE_SHARED_SECRET="$SENTINEL" API_BASE_URL=https://api.storeflick.in/v1 npm run cf:build
           EDGE_SHARED_SECRET="$SENTINEL" npm run verify:bundle
 
       - name: Deploy to Cloudflare Workers

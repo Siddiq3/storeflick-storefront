@@ -1,5 +1,5 @@
 ---
-name: StoreKit Storefront
+name: StoreFlick Storefront
 description: The Indian marketplace standard, in each shop's own colours.
 colors:
   shop-primary: "var(--sk-primary)"
@@ -87,7 +87,7 @@ components:
     height: "46px"
 ---
 
-# Design System: StoreKit Storefront
+# Design System: StoreFlick Storefront
 
 ## Overview
 

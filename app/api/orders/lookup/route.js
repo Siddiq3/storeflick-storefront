@@ -1,4 +1,4 @@
-import { orderLookupSchema } from '@storekit/validation';
+import { orderLookupSchema } from '@storeflick/validation';
 import { handleStorePost } from '@/lib/bff.js';
 import { findOrder, toPublicOrder } from '@/lib/store-data.js';
 

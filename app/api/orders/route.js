@@ -1,4 +1,4 @@
-import { createOrderSchema } from '@storekit/validation';
+import { createOrderSchema } from '@storeflick/validation';
 import { handleStorePost, failure, IDEMPOTENCY_KEY, sameOrigin } from '@/lib/bff.js';
 import { createOrder, toPublicOrder } from '@/lib/store-data.js';
 

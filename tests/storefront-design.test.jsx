@@ -6,7 +6,7 @@ import { fail, mockApi, ok, rawStore } from './helpers.js';
 
 let loaded;
 const data = { home: null, page: null, categories: [] };
-const ctx = { slug: 'asha', host: 'asha.storekit.site', canonicalHost: 'asha.storekit.site', ip: null };
+const ctx = { slug: 'asha', host: 'asha.storeflick.in', canonicalHost: 'asha.storeflick.in', ip: null };
 let incoming = new Headers();
 
 vi.mock('next/headers', () => ({ headers: async () => incoming }));
@@ -138,7 +138,7 @@ describe('header and footer', () => {
     expect(out).toContain('Powered by');
   });
 
-  it('a store without branding shows no StoreKit credit', () => {
+  it('a store without branding shows no StoreFlick credit', () => {
     expect(renderToStaticMarkup(<Footer store={toStore(rawStore({ poweredByBranding: false }))} categories={[]} />)).not.toContain('Powered by');
   });
 });
@@ -178,9 +178,9 @@ describe('owner pages', () => {
 });
 
 describe('track order', () => {
-  const HOST = 'asha.storekit.site';
+  const HOST = 'asha.storeflick.in';
   const post = (body, origin = `https://${HOST}`) => lookup(new Request(`https://${HOST}/api/orders/lookup`, { method: 'POST', headers: { host: HOST, origin, 'content-type': 'application/json' }, body: JSON.stringify(body) }));
-  beforeEach(() => { incoming = new Headers({ 'x-storekit-slug': 'asha' }); });
+  beforeEach(() => { incoming = new Headers({ 'x-storeflick-slug': 'asha' }); });
 
   it('finds an order by number and mobile, without its internal id', async () => {
     mockApi({ 'POST /public/stores/asha/orders/lookup': ok({ orderId: 'INTERNAL', orderNumber: 'ORD-000123', status: 'NEW' }) });

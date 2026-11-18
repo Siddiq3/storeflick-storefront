@@ -1,20 +1,20 @@
-# StoreKit storefront
+# StoreFlick storefront
 
-The public, customer-facing shop for every StoreKit merchant. One Next.js application serves every store: the
+The public, customer-facing shop for every StoreFlick merchant. One Next.js application serves every store: the
 hostname decides which one.
 
 ```
-StoreKit Owner/Admin Web  →  billing, account, admin           (web)
-StoreKit Mobile           →  merchant management               (mobile)
-StoreKit Storefront       →  public customer shopping          (this repository)
-StoreKit Backend          →  DynamoDB / R2                     (backend)
+StoreFlick Owner/Admin Web  →  billing, account, admin           (web)
+StoreFlick Mobile           →  merchant management               (mobile)
+StoreFlick Storefront       →  public customer shopping          (this repository)
+StoreFlick Backend          →  DynamoDB / R2                     (backend)
 ```
 
 | | |
 |---|---|
-| Marketing / website | `https://storekit.site` (the `web` app; not served by this one) |
-| **Merchant storefront** | `https://<business-slug>.storekit.site` |
-| API | `https://api.storekit.site` (staging: `https://api-staging.storekit.site`) |
+| Marketing / website | `https://storeflick.in` (the `web` app; not served by this one) |
+| **Merchant storefront** | `https://<business-slug>.storeflick.in` |
+| API | `https://api.storeflick.in` (staging: `https://api-staging.storeflick.in`) |
 | Customer domains | later; the same code answers them (see "Hostname resolution") |
 
 ## The rules this app is built on
@@ -23,7 +23,7 @@ StoreKit Backend          →  DynamoDB / R2                     (backend)
    incoming `Host` to `GET /v1/public/hosts/resolve?host=…`. The backend is the authority; there is no host rule in this
    repository beyond checking that a Host header is shaped like one (using the backend's own `hostFromHeader`).
    A `businessId` is never accepted from a URL, cookie, query string, header or body.
-2. **The browser never calls the StoreKit API.** All API calls are made by this app's server (middleware, server
+2. **The browser never calls the StoreFlick API.** All API calls are made by this app's server (middleware, server
    components, `/api/*` route handlers). The API's CORS list is exact origins and stays that way, and this app's CSP is
    `connect-src 'self'`, so a script on a store page could not reach the API even if it tried.
 3. **The shopper's address is forwarded, with a shared secret, so the API rate-limits shoppers and not this server.**
@@ -71,22 +71,22 @@ All server-side. **None may be prefixed `NEXT_PUBLIC_`.**
 
 | Variable | Production | Staging | Local |
 |---|---|---|---|
-| `API_BASE_URL` | `https://api.storekit.site/v1` | `https://api-staging.storekit.site/v1` | `http://localhost:8787/v1` |
-| `STOREFRONT_ROOT_URL` | `https://storekit.site` | the staging storefront root | `http://lvh.me:3000` |
+| `API_BASE_URL` | `https://api.storeflick.in/v1` | `https://api-staging.storeflick.in/v1` | `http://localhost:8787/v1` |
+| `STOREFRONT_ROOT_URL` | `https://storeflick.in` | the staging storefront root | `http://lvh.me:3000` |
 | `EDGE_SHARED_SECRET` | the production secret (required) | the staging secret (required) | unset |
 | `CLIENT_IP_HEADER` | `cf-connecting-ip` (default) | same | unset |
 
 - `API_BASE_URL` includes `/v1`. (The mobile app's `EXPO_PUBLIC_API_URL` does not; the app adds it.)
 - `STOREFRONT_ROOT_URL` must equal the API's `STOREFRONT_BASE_URL`. It supplies the scheme for canonical addresses and
-  redirects, and the "Powered by StoreKit" link.
+  redirects, and the "Powered by StoreFlick" link.
 - In production the app refuses to serve (a 503 state page) if `API_BASE_URL` is not `https`, or `EDGE_SHARED_SECRET` is
   missing or shorter than 32 characters.
 
 ## Hostname resolution
 
 ```
-asha.storekit.site   ─┐
-demo.storekit.site    ├─►  middleware ─► GET /v1/public/hosts/resolve?host=<Host>
+asha.storeflick.in   ─┐
+demo.storeflick.in    ├─►  middleware ─► GET /v1/public/hosts/resolve?host=<Host>
 shop.example.com     ─┘                     │
                                             ├─ 200 { slug, canonicalHost, redirect }
                                             └─ 404 (unknown, inactive, suspended, not a store: all the same)
@@ -107,7 +107,7 @@ The storefront is one server calling the API for many shoppers. To keep per-shop
 
 ```
 CF-Connecting-IP:        <the shopper's address>
-X-StoreKit-Edge-Secret:  <EDGE_SHARED_SECRET>
+X-StoreFlick-Edge-Secret:  <EDGE_SHARED_SECRET>
 ```
 
 - The API believes the address **only** if the secret matches (constant-time) and the address is exactly one valid IPv4/IPv6
@@ -121,7 +121,7 @@ X-StoreKit-Edge-Secret:  <EDGE_SHARED_SECRET>
   one address. That is correct only if this app's origin is reachable solely through the edge that sets the header
   (Cloudflare): a request that goes around the edge could choose its own identity.
 - Known limit: Cloudflare sets `CF-Connecting-IP` itself on requests that go through its proxy, so this contract works
-  while the API hostname is not proxied (DNS-only). See the backend's deployment guide before proxying `api.storekit.site`.
+  while the API hostname is not proxied (DNS-only). See the backend's deployment guide before proxying `api.storeflick.in`.
 
 ## Routes
 
@@ -148,7 +148,7 @@ corrected with a permanent redirect if it is wrong. Pages that are private (`car
 Server-rendered metadata, canonical URL, Open Graph and Twitter tags on every public page, `Store`, `Product` (with
 price and availability) and `BreadcrumbList` structured data, a per-host sitemap and robots. **Every absolute address is
 built from the `canonicalHost` the API returned for the store**, never from the Host the visitor typed and never from
-`storekit.site`: `https://asha.storekit.site/products/brake-pad--…` canonicalises to itself. Missing products and
+`storeflick.in`: `https://asha.storeflick.in/products/brake-pad--…` canonicalises to itself. Missing products and
 categories return real 404 statuses; redirects are real 308s.
 
 ## Layout
@@ -164,18 +164,18 @@ checkout can do: cash on delivery and UPI, and free delivery only when the store
 The store's own theme from the API (colours, font, layout grid/list, corner radius), turned into CSS variables; invalid
 values fall back to the theme schema's defaults. Text colour is chosen for contrast against the store's background.
 Sections and banners are the owner's. There is no second theme system, and custom design (Pro) is not implemented.
-"Powered by StoreKit" is shown when the API says branding applies (`poweredByBranding`, from the plan's `removeBranding`
+"Powered by StoreFlick" is shown when the API says branding applies (`poweredByBranding`, from the plan's `removeBranding`
 entitlement); this app never looks at a plan id.
 
 ## Deployment model
 
-- One deployment serves every store. Point the wildcard record `*.storekit.site` (proxied by Cloudflare) at it. The host must
-  pass the original `Host` header through and run Next.js middleware. `storekit.site` and `www` stay on the website and
+- One deployment serves every store. Point the wildcard record `*.storeflick.in` (proxied by Cloudflare) at it. The host must
+  pass the original `Host` header through and run Next.js middleware. `storeflick.in` and `www` stay on the website and
   `api` on the API; a more specific record always beats the wildcard.
 - The origin should accept traffic only from Cloudflare (that is what makes `CF-Connecting-IP` trustworthy).
 - Set the three environment variables above per environment; `NODE_ENV=production` is what turns on the strict checks.
 - Public reads are kept in each instance's memory for 30–120 s (the API's own cache lifetimes), so instances need no shared cache.
-- Custom domains later: the storefront's origin becomes Cloudflare for SaaS's fallback origin and `domains.storekit.site`
+- Custom domains later: the storefront's origin becomes Cloudflare for SaaS's fallback origin and `domains.storeflick.in`
   the CNAME target. No storefront change is needed.
 - Nothing is deployed yet. Do not enable wildcard DNS until the API's `EDGE_SHARED_SECRET` is set.
 - **Instagram attribution: deploy the API first.** Checkout sends an optional `instagramRef` with orders. An API older
@@ -185,7 +185,7 @@ entitlement); this app never looks at a plan id.
 ### Cloudflare Workers
 
 The storefront runs as one Cloudflare Worker (Workers Paid), built with the OpenNext adapter. `wrangler.jsonc` routes
-`*.storekit.site/*` to it; the Worker is the origin, so the original `Host` reaches the middleware and nothing can reach
+`*.storeflick.in/*` to it; the Worker is the origin, so the original `Host` reaches the middleware and nothing can reach
 the app around Cloudflare.
 
 ```bash
@@ -198,7 +198,7 @@ Deploys run only from `.github/workflows/deploy.yml`, started by hand (dry run b
 and gives the secret to the Worker as an encrypted Worker secret. `NODE_ENV=production` is set in `wrangler.jsonc`.
 
 **Temporary preview (before the domain exists).** `.github/workflows/deploy-preview.yml` deploys a separate Worker,
-`storekit-storefront-preview` (`wrangler.jsonc`, env `preview`), to its `workers.dev` address only. A `workers.dev`
+`storeflick-storefront-preview` (`wrangler.jsonc`, env `preview`), to its `workers.dev` address only. A `workers.dev`
 hostname is not a store hostname, so that deployment sets `PREVIEW_STORE_SLUG`: the middleware asks the API about
 `<slug>.<STOREFRONT_ROOT_URL host>` instead of the request's Host, and every response carries `X-Robots-Tag: noindex`.
 The production Worker never sets it.

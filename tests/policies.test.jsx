@@ -13,7 +13,7 @@ import { fail, mockApi, ok, rawStore } from './helpers.js';
  * the return rule under the buy button, and that nothing an owner types can become markup.
  */
 
-const ctx = { slug: 'asha', ip: '203.0.113.7', host: 'asha.storekit.site', canonicalHost: 'asha.storekit.site' };
+const ctx = { slug: 'asha', ip: '203.0.113.7', host: 'asha.storeflick.in', canonicalHost: 'asha.storeflick.in' };
 let loaded;
 vi.mock('@/lib/load.js', () => ({ loadStoreOrState: async () => loaded }));
 vi.mock('next/navigation', () => ({
@@ -27,7 +27,7 @@ vi.mock('next/headers', () => ({ headers: async () => incoming }));
 const { default: PolicyPage } = await import('../app/(store)/(detail)/policies/[policySlug]/page.js');
 const { GET: policyRoute } = await import('../app/api/policies/[policySlug]/route.js');
 const { PolicyLink } = await import('../components/PolicyLink.jsx');
-const asStore = (slug) => { incoming = new Headers({ 'x-storekit-slug': slug, 'x-storekit-host': `${slug}.storekit.site`, 'x-storekit-canonical-host': `${slug}.storekit.site` }); };
+const asStore = (slug) => { incoming = new Headers({ 'x-storeflick-slug': slug, 'x-storeflick-host': `${slug}.storeflick.in`, 'x-storeflick-canonical-host': `${slug}.storeflick.in` }); };
 
 const LINKS = [
   { type: 'privacy', slug: 'privacy-policy', title: 'Privacy Policy' },
@@ -128,7 +128,7 @@ describe('policies on the storefront', () => {
     it('the dialog loads the same content as the page, for the store the request is on', async () => {
       const calls = mockApi({ 'GET /public/stores/asha/policies/privacy': ok(PRIVACY) });
       asStore('asha');
-      const response = await policyRoute(new Request('https://asha.storekit.site/api/policies/privacy-policy'), { params: params('privacy-policy') });
+      const response = await policyRoute(new Request('https://asha.storeflick.in/api/policies/privacy-policy'), { params: params('privacy-policy') });
       expect(response.status).toBe(200);
       const body = await response.json();
       expect(body).toEqual({ slug: 'privacy-policy', title: 'Privacy Policy', content: PRIVACY.content });
@@ -142,10 +142,10 @@ describe('policies on the storefront', () => {
     it('the dialog\'s route answers 404 for a hidden or unknown policy, or a request without a store', async () => {
       mockApi({ 'GET /public/stores/asha/policies/terms': fail(404, 'NOT_FOUND', 'Policy not found') });
       asStore('asha');
-      expect((await policyRoute(new Request('https://asha.storekit.site/api/policies/terms'), { params: params('terms') })).status).toBe(404);
-      expect((await policyRoute(new Request('https://asha.storekit.site/api/policies/x'), { params: params('no-such-policy') })).status).toBe(404);
+      expect((await policyRoute(new Request('https://asha.storeflick.in/api/policies/terms'), { params: params('terms') })).status).toBe(404);
+      expect((await policyRoute(new Request('https://asha.storeflick.in/api/policies/x'), { params: params('no-such-policy') })).status).toBe(404);
       incoming = new Headers();
-      expect((await policyRoute(new Request('https://asha.storekit.site/api/policies/privacy-policy'), { params: params('privacy-policy') })).status).toBe(404);
+      expect((await policyRoute(new Request('https://asha.storeflick.in/api/policies/privacy-policy'), { params: params('privacy-policy') })).status).toBe(404);
     });
 
     it('a hidden or missing policy is a 404 page', async () => {

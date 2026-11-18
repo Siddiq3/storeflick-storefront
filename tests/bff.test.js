@@ -9,7 +9,7 @@ const { POST: quote } = await import('../app/api/quote/route.js');
 const { POST: order } = await import('../app/api/orders/route.js');
 const { POST: upi } = await import('../app/api/orders/upi/route.js');
 
-const HOST = 'asha.storekit.site';
+const HOST = 'asha.storeflick.in';
 const address = { fullName: 'Asha Rao', mobile: '9876543210', houseNo: '12', street: 'MG Road', area: 'Indiranagar', city: 'Bengaluru', district: 'Bengaluru Urban', state: 'Karnataka', pincode: '560038' };
 const lines = [{ productId: ULID, quantity: 2 }];
 const TOKEN = '01H8XGJWBWBAQ4Z4RZ4ZQ1ZQ1Z.' + 'a'.repeat(43);
@@ -23,7 +23,7 @@ const body = async (response) => response.json();
 describe('storefront API routes (what the browser is allowed to call)', () => {
   beforeEach(() => {
     clearStoreCache();
-    incoming = new Headers({ 'x-storekit-slug': 'asha', 'x-storekit-host': HOST, 'x-storekit-canonical-host': HOST, 'cf-connecting-ip': '203.0.113.7' });
+    incoming = new Headers({ 'x-storeflick-slug': 'asha', 'x-storeflick-host': HOST, 'x-storeflick-canonical-host': HOST, 'cf-connecting-ip': '203.0.113.7' });
   });
 
   describe('which store', () => {
@@ -36,7 +36,7 @@ describe('storefront API routes (what the browser is allowed to call)', () => {
 
     it('a businessId, slug or storeId in the body is refused, not forwarded', async () => {
       const calls = mockApi({ 'POST /public/stores/asha/cart/quote': ok({}) });
-      for (const extra of [{ businessId: '01HZZZ' }, { slug: 'demo' }, { storeId: 'x' }, { host: 'demo.storekit.site' }]) {
+      for (const extra of [{ businessId: '01HZZZ' }, { slug: 'demo' }, { storeId: 'x' }, { host: 'demo.storeflick.in' }]) {
         const response = await post(quote, { lines, ...extra });
         expect(response.status, JSON.stringify(extra)).toBe(400);
       }
@@ -51,7 +51,7 @@ describe('storefront API routes (what the browser is allowed to call)', () => {
     });
 
     it('a slug header that is not a slug is not used', async () => {
-      incoming = new Headers({ 'x-storekit-slug': '../admin' });
+      incoming = new Headers({ 'x-storeflick-slug': '../admin' });
       const calls = mockApi({});
       expect((await post(quote, { lines })).status).toBe(404);
       expect(calls).toHaveLength(0);
@@ -61,7 +61,7 @@ describe('storefront API routes (what the browser is allowed to call)', () => {
   describe('who may call', () => {
     it('refuses another site\'s page, a missing Origin, and an Origin for a different host', async () => {
       const calls = mockApi({ 'POST /public/stores/asha/cart/quote': ok({}) });
-      for (const origin of ['https://evil.example', 'https://demo.storekit.site', null, 'null', 'not a url']) {
+      for (const origin of ['https://evil.example', 'https://demo.storeflick.in', null, 'null', 'not a url']) {
         expect((await post(quote, { lines }, { origin })).status, String(origin)).toBe(403);
       }
       expect(calls).toHaveLength(0);
@@ -81,14 +81,14 @@ describe('storefront API routes (what the browser is allowed to call)', () => {
       const calls = mockApi({ 'POST /public/stores/asha/cart/quote': ok({ total: 1 }) });
       const response = await post(quote, { lines });
       expect(calls[0].headers['cf-connecting-ip']).toBe('203.0.113.7');
-      expect(calls[0].headers['x-storekit-edge-secret']).toBe(process.env.EDGE_SHARED_SECRET);
+      expect(calls[0].headers['x-storeflick-edge-secret']).toBe(process.env.EDGE_SHARED_SECRET);
       const text = JSON.stringify(await body(response)) + [...response.headers].join();
       expect(text).not.toContain(process.env.EDGE_SHARED_SECRET);
       expect(text).not.toContain('api.test.local');
     });
 
     it('an X-Forwarded-For from the visitor is not what gets forwarded', async () => {
-      incoming = new Headers({ 'x-storekit-slug': 'asha', 'x-forwarded-for': '198.51.100.99' });
+      incoming = new Headers({ 'x-storeflick-slug': 'asha', 'x-forwarded-for': '198.51.100.99' });
       const calls = mockApi({ 'POST /public/stores/asha/cart/quote': ok({}) });
       await post(quote, { lines });
       expect(calls[0].headers['cf-connecting-ip']).toBeUndefined();
@@ -149,11 +149,11 @@ describe('storefront API routes (what the browser is allowed to call)', () => {
     });
 
     it('when the API is down the shopper gets a generic message, never a backend one', async () => {
-      mockApi({ 'POST /public/stores/asha/orders': fail(500, 'INTERNAL_ERROR', 'ReferenceError: table storekit-prod-main at /var/task/x.js') });
+      mockApi({ 'POST /public/stores/asha/orders': fail(500, 'INTERNAL_ERROR', 'ReferenceError: table storeflick-prod-main at /var/task/x.js') });
       const response = await post(order, good(), { idem: 'sk_abcdefgh12345678' });
       const text = JSON.stringify(await body(response));
       expect(response.status).toBe(503);
-      expect(text).not.toMatch(/ReferenceError|storekit-prod|\/var\/task/);
+      expect(text).not.toMatch(/ReferenceError|storeflick-prod|\/var\/task/);
     });
 
     it('a rate-limited shopper is told to wait', async () => {

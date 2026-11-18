@@ -12,14 +12,14 @@ describe('forwarding the shopper to the API', () => {
     const calls = mockApi({ 'GET /public/x': ok({}) });
     await apiFetch('/public/x', { ip: '203.0.113.7' });
     expect(calls[0].headers['cf-connecting-ip']).toBe('203.0.113.7');
-    expect(calls[0].headers['x-storekit-edge-secret']).toBe(SECRET);
+    expect(calls[0].headers['x-storeflick-edge-secret']).toBe(SECRET);
   });
 
   it('sends neither when there is no shopper address — the secret is not sent for nothing', async () => {
     const calls = mockApi({ 'GET /public/x': ok({}) });
     await apiFetch('/public/x', { ip: null });
     expect(calls[0].headers['cf-connecting-ip']).toBeUndefined();
-    expect(calls[0].headers['x-storekit-edge-secret']).toBeUndefined();
+    expect(calls[0].headers['x-storeflick-edge-secret']).toBeUndefined();
   });
 
   it('sends neither when no secret is configured: an address without proof would only be ignored', async () => {
@@ -98,16 +98,16 @@ describe('shopper address', () => {
 });
 
 describe('configuration', () => {
-  const base = { NODE_ENV: 'production', API_BASE_URL: 'https://api.storekit.site/v1', STOREFRONT_ROOT_URL: 'https://storekit.site', EDGE_SHARED_SECRET: SECRET };
+  const base = { NODE_ENV: 'production', API_BASE_URL: 'https://api.storeflick.in/v1', STOREFRONT_ROOT_URL: 'https://storeflick.in', EDGE_SHARED_SECRET: SECRET };
 
   it('accepts the production setting', () => {
     const cfg = loadConfig(base);
-    expect(cfg).toMatchObject({ apiBaseUrl: 'https://api.storekit.site/v1', rootUrl: 'https://storekit.site', rootScheme: 'https', clientIpHeader: 'cf-connecting-ip' });
+    expect(cfg).toMatchObject({ apiBaseUrl: 'https://api.storeflick.in/v1', rootUrl: 'https://storeflick.in', rootScheme: 'https', clientIpHeader: 'cf-connecting-ip' });
   });
 
   it('requires the secret, an https API and the root in production', () => {
     expect(() => loadConfig({ ...base, EDGE_SHARED_SECRET: '' })).toThrow(ConfigError);
-    expect(() => loadConfig({ ...base, API_BASE_URL: 'http://api.storekit.site/v1' })).toThrow(/https/);
+    expect(() => loadConfig({ ...base, API_BASE_URL: 'http://api.storeflick.in/v1' })).toThrow(/https/);
     expect(() => loadConfig({ ...base, API_BASE_URL: '' })).toThrow(/API_BASE_URL/);
     expect(() => loadConfig({ ...base, STOREFRONT_ROOT_URL: '' })).toThrow(/STOREFRONT_ROOT_URL/);
   });
@@ -118,7 +118,7 @@ describe('configuration', () => {
   });
 
   it('takes the API address from the environment, staging included', () => {
-    expect(loadConfig({ ...base, API_BASE_URL: 'https://api-staging.storekit.site/v1/' }).apiBaseUrl).toBe('https://api-staging.storekit.site/v1');
+    expect(loadConfig({ ...base, API_BASE_URL: 'https://api-staging.storeflick.in/v1/' }).apiBaseUrl).toBe('https://api-staging.storeflick.in/v1');
   });
 
   it('has local defaults outside production, and none for the secret', () => {

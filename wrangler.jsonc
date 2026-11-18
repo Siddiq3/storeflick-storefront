@@ -6,7 +6,7 @@
 //   EDGE_SHARED_SECRET                 (--secrets-file, from a GitHub environment secret)
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "storekit-storefront",
+  "name": "storeflick-storefront",
   "main": ".open-next/worker.js",
   "compatibility_date": "2026-09-01",
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
@@ -26,16 +26,16 @@
   "workers_dev": false,
   "preview_urls": false,
 
-  // Every store subdomain. storekit.site and www are other apps: exclude www.storekit.site/* from this route in the
-  // Cloudflare dashboard (a route with no Worker). api.storekit.site is DNS-only, so Worker routes never see it.
+  // Every store subdomain. storeflick.in and www are other apps: exclude www.storeflick.in/* from this route in the
+  // Cloudflare dashboard (a route with no Worker). api.storeflick.in is DNS-only, so Worker routes never see it.
   // Customer domains (Cloudflare for SaaS, a "*/*" route) are not set up yet.
   "routes": [
-    { "pattern": "*.storekit.site/*", "zone_name": "storekit.site" }
+    { "pattern": "*.storeflick.in/*", "zone_name": "storeflick.in" }
   ],
 
   "env": {
     // TEMPORARY real-user testing before the domain exists: `--env preview` deploys a separate Worker,
-    // storekit-storefront-preview, on its workers.dev address only (no routes). It serves the one store named by
+    // storeflick-storefront-preview, on its workers.dev address only (no routes). It serves the one store named by
     // PREVIEW_STORE_SLUG, passed by the preview workflow along with the same API settings and secret.
     "preview": {
       "workers_dev": true,

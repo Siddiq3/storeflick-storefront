@@ -37,7 +37,7 @@ export function useQuote({ lines, ready, couponCode, pincode, paymentMethod, del
   return { ...state, refresh: () => setRefreshes((n) => n + 1) };
 }
 
-const COUPON_KEY = 'storekit.coupon.v1';
+const COUPON_KEY = 'storeflick.coupon.v1';
 
 export const readCoupon = () => {
   try { return sessionStorage.getItem(COUPON_KEY) ?? ''; } catch { return ''; }

@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { AddressLocationFields } from '@/components/AddressLocationFields.jsx';
 import { STATES, districtsForState, changeAddressField, restoreLocation } from '@/lib/address-locations.js';
-import { addressSchema } from '@storekit/validation';
+import { addressSchema } from '@storeflick/validation';
 
 describe('checkout location selection', () => {
   it('all supplied names satisfy the API address rules', () => {

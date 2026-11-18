@@ -17,7 +17,7 @@ vi.mock('next/headers', () => ({ headers: async () => incoming }));
 const { POST: quoteRoute } = await import('../app/api/quote/route.js');
 const { POST: orderRoute } = await import('../app/api/orders/route.js');
 
-const HOST = 'asha.storekit.site';
+const HOST = 'asha.storeflick.in';
 const lines = [{ productId: ULID, quantity: 1 }];
 const address = { fullName: 'Asha Rao', mobile: '9876543210', houseNo: '12', street: 'MG Road', area: 'Indiranagar', city: 'Bengaluru', district: 'Bengaluru Urban', state: 'Karnataka', pincode: '560038' };
 const post = (handler, payload, extra = {}) =>
@@ -50,7 +50,7 @@ const requestOf = (call) => JSON.parse(call.init.body);
 describe('checkout: choosing a delivery method', () => {
   beforeEach(() => {
     clearStoreCache();
-    incoming = new Headers({ 'x-storekit-slug': 'asha', 'x-storekit-host': HOST, 'x-storekit-canonical-host': HOST, 'cf-connecting-ip': '203.0.113.7' });
+    incoming = new Headers({ 'x-storeflick-slug': 'asha', 'x-storeflick-host': HOST, 'x-storeflick-canonical-host': HOST, 'cf-connecting-ip': '203.0.113.7' });
   });
 
   it('choosing Standard, then Express, asks for a new quote each time, and shows the server’s price and total', async () => {

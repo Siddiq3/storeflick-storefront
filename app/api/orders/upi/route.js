@@ -1,4 +1,4 @@
-import { upiSubmissionSchema } from '@storekit/validation';
+import { upiSubmissionSchema } from '@storeflick/validation';
 import { handleStorePost } from '@/lib/bff.js';
 import { submitUpiReference, toPublicOrder } from '@/lib/store-data.js';
 

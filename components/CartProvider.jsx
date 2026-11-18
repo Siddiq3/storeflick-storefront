@@ -8,7 +8,7 @@ import { addLine, itemCount, removeLine, sanitize, setQuantity } from '@/lib/car
  * never another's). Only ids and quantities matter; everything a shopper pays is quoted by the server.
  */
 
-const STORAGE_KEY = 'storekit.cart.v1';
+const STORAGE_KEY = 'storeflick.cart.v1';
 const CartContext = createContext(null);
 
 const read = () => {
